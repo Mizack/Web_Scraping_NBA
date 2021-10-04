@@ -10,9 +10,9 @@ import json
 url = 'https://www.nba.com/stats/players/boxscores-traditional/'
 
 # instanciar navegador
-option = Options()
-option.headless = True
-driver = webdriver.Firefox()
+options = Options()
+options.headless = True
+driver = webdriver.Firefox(options=options, executable_path=r'.\geckodriver.exe')
 driver.get(url)
 time.sleep(10)
 try:
@@ -27,7 +27,7 @@ try:
         except:
             print('cookie nao apareceu')
     # clicando no filtro
-    time.sleep(5)
+    time.sleep(20)
     driver.find_element_by_xpath('/html/body/main/div/div/div[2]/div/div/nba-stat-table/div[2]/div[1]/table/thead/tr/th[8]').click()
     print('clicou no filtro')
     # salvar elemento html
@@ -36,6 +36,7 @@ try:
     # salvar conteudo
     time.sleep(1)
     html_salvo = elemento.get_attribute('outerHTML')
+    print(html_salvo)
 
 except:
     print("Deu ruim na captação de dados")
@@ -68,7 +69,7 @@ try:
     top10['points'] = df.to_dict('records')
     print(top10['points'])
     arq_ = json.dumps(top10)
-    arq_final = open('ranking.json','w')
+    arq_final = open('ranking2.json','w')
     arq_final.write(arq_)
     arq_final.close()
 except:
