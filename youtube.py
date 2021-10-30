@@ -19,7 +19,6 @@ class Youtube(Acessar_web):
 
     def acessar_codigo_html(self,identificador):
         # idicando local em que os vídeos se encontram
-        time.sleep(10)
         try:
             
             videos = self.nav.find_element_by_xpath(identificador)
@@ -27,7 +26,6 @@ class Youtube(Acessar_web):
             self.nav.find_element_by_xpath('//*[@id="right-arrow"]/ytd-button-renderer').click()
             # salvando dados da pagina
             html = videos.get_attribute('outerHTML')
-            print(html)
             # fechando wd
             self.nav.quit()
             return html
@@ -41,7 +39,7 @@ class Youtube(Acessar_web):
         soup = BeautifulSoup(self.acessar_codigo_html(identi),'html.parser')
         titulos_pg = soup.find(name='span',attrs={'id':'title'})
         titulos = soup.find_all(name='a',attrs={'id':'video-title'})
-        print(titulos)
+        # print(titulos)
         canais = soup.find_all(name='a',attrs={'class':'yt-simple-endpoint style-scope yt-formatted-string'})
         data_postages_views = soup.find_all(name='span',attrs={'class':'style-scope ytd-grid-video-renderer'})
         links = soup.find_all(name='a',attrs={'id':'thumbnail'})
@@ -94,15 +92,14 @@ class Youtube(Acessar_web):
         channel = self.extrair_dados_coletados(canais)
         time,view = self.extrair_dados_coletados(data_postages_views,None,'dados')
         link = self.extrair_dados_coletados(links,'dados')
-
         df = pd.DataFrame({'TITULO':name,'CANAL':channel,'TEMPO_POSTAGEM':time,'VISUALIZACOES':view,'LINK_VIDEO':link,'DATA_ACESSO':self.data_agora()})
         print(df)
         title_alt = str(title).replace('[','').replace(']','').replace("'","").replace('í','i').replace(' ','_')
         df.to_csv(str(title_alt+'.csv'),index=False,sep='\t')
         
         
-    def ler_arq_final(self):
-        dados = pd.read_csv('Novos_videos.csv',sep='\t')
+    def ler_arq_final(self,arquivo):
+        dados = pd.read_csv(arquivo,sep='\t')
         return dados
 
 

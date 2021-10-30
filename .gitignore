@@ -4,3 +4,6 @@ geckodriver.exe
 geckodriver.log
 teste.py
 fiap.py
+./__pycache__
+Novos_videos.csv
+Principais_noticias.csv
